@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Card from "./Card";
 
 const Scroll = () => {
@@ -7,7 +7,7 @@ const Scroll = () => {
   const [loading, setLoading] = useState(false);
   const [totalData, setTotalData] = useState(0);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (data.length >= totalData && totalData !== 0) {
       setLoading(false);
       return;
@@ -25,7 +25,8 @@ const Scroll = () => {
     } finally {
       setLoading(false);
     }
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const handleScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -42,7 +43,7 @@ const Scroll = () => {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, [fetchData]);
   return (
     <div className="container my-4 flex flex-col gap-4">
       {data &&
